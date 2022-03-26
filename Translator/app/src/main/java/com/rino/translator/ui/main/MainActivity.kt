@@ -1,12 +1,29 @@
 package com.rino.translator.ui.main
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.rino.translator.R
+import com.rino.translator.core.model.Word
+import com.rino.translator.core.repository.WordsRepositoryImpl
+import com.rino.translator.databinding.ActivityMainBinding
+import com.rino.translator.network.DictionaryApiHolder
+import moxy.MvpAppCompatActivity
+import moxy.ktx.moxyPresenter
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : MvpAppCompatActivity(), MainView {
+
+    private lateinit var binding: ActivityMainBinding
+
+    private val presenter by moxyPresenter {
+        MainPresenter(WordsRepositoryImpl(DictionaryApiHolder.dictionaryApiService))
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
     }
+
+    override fun updateList(words: List<Word>) {
+        TODO("Not yet implemented")
+    }
+
 }

@@ -11,8 +11,8 @@ android {
         applicationId "com.rino.translator"
         minSdk 28
         targetSdk 31
-        versionCode 3
-        versionName "1.0.3"
+        versionCode 4
+        versionName "1.0.4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -22,6 +22,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+
+    buildTypes.each {
+        it.buildConfigField "String", "DICTIONARY_BASE_URL", "\"https://dictionary.skyeng.ru/api/public/v1/\""
     }
 
     compileOptions {
