@@ -1,9 +1,12 @@
 package com.rino.translator.ui.main
 
 import android.os.Bundle
+import android.view.Menu
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.rino.translator.R
 import com.rino.translator.core.model.ScreenState
 import com.rino.translator.core.model.Word
 import com.rino.translator.core.repository.WordsRepositoryImpl
@@ -17,10 +20,6 @@ import moxy.MvpAppCompatActivity
 import moxy.ktx.moxyPresenter
 
 class MainActivity : MvpAppCompatActivity(), MainView {
-
-    companion object {
-        private const val BOTTOM_SHEET_FRAGMENT_DIALOG_TAG = "BOTTOM_SHEET_FRAGMENT_DIALOG_TAG"
-    }
 
     private val presenter by moxyPresenter {
         MainPresenter(WordsRepositoryImpl(DictionaryApiHolder.dictionaryApiService))
@@ -41,17 +40,6 @@ class MainActivity : MvpAppCompatActivity(), MainView {
         setContentView(binding.root)
 
         _includeBinding = ProgressBarAndErrorMsgBinding.bind(binding.root)
-
-        binding.searchFab.setOnClickListener {
-            val searchDialogFragment = SearchDialogFragment.newInstance()
-            searchDialogFragment.setOnSearchClickListener(object :
-                SearchDialogFragment.OnSearchClickListener {
-                override fun onClick(searchWord: String) {
-                    presenter.search(searchWord)
-                }
-            })
-            searchDialogFragment.show(supportFragmentManager, BOTTOM_SHEET_FRAGMENT_DIALOG_TAG)
-        }
 
         with(binding.wordsRecyclerView) {
             layoutManager = LinearLayoutManager(context)
@@ -85,7 +73,6 @@ class MainActivity : MvpAppCompatActivity(), MainView {
 
             is ScreenState.Error -> {
                 binding.visibilityGroup.isVisible = false
-                binding.searchFab.isVisible = true
 
                 with(includeBinding) {
                     progressBar.isVisible = false
@@ -100,4 +87,21 @@ class MainActivity : MvpAppCompatActivity(), MainView {
         showToast(message)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main, menu)
+
+        val search = menu!!.findItem(R.id.action_search)
+        val searchView = search.actionView as SearchView
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean = true
+
+            override fun onQueryTextChange(query: String?): Boolean {
+                presenter.search(query ?: "")
+                return true
+            }
+        })
+
+        return true
+    }
 }
