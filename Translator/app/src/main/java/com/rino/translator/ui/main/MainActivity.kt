@@ -7,6 +7,7 @@ import com.rino.translator.core.model.Word
 import com.rino.translator.core.repository.WordsRepositoryImpl
 import com.rino.translator.databinding.ActivityMainBinding
 import com.rino.translator.network.DictionaryApiHolder
+import com.rino.translator.ui.base.GlideImageLoader
 import com.rino.translator.ui.main.adapter.WordsAdapter
 import com.rino.translator.ui.showToast
 import moxy.MvpAppCompatActivity
@@ -25,7 +26,7 @@ class MainActivity : MvpAppCompatActivity(), MainView {
     }
 
     private val wordsAdapter by lazy {
-        WordsAdapter(presenter::onUserClicked)
+        WordsAdapter(GlideImageLoader(), presenter::onUserClicked)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -8,4 +8,7 @@
     <dimen name="text_size_large">24sp</dimen>
 
     <dimen name="bottom_sheet_dialog_corner_radius">10dp</dimen>
+    <dimen name="match_constraint">0dp</dimen>
+    <dimen name="preview_image_width">96dp</dimen>
+    <dimen name="preview_image_height">72dp</dimen>
 </resources>
