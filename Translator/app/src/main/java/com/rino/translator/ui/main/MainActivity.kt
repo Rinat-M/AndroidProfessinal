@@ -2,6 +2,8 @@ package com.rino.translator.ui.main
 
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -16,13 +18,17 @@ import com.rino.translator.network.DictionaryApiHolder
 import com.rino.translator.ui.base.GlideImageLoader
 import com.rino.translator.ui.main.adapter.WordsAdapter
 import com.rino.translator.ui.showToast
+import com.rino.translator.wrappers.ThemeSharedPreferencesWrapper
 import moxy.MvpAppCompatActivity
 import moxy.ktx.moxyPresenter
 
 class MainActivity : MvpAppCompatActivity(), MainView {
 
     private val presenter by moxyPresenter {
-        MainPresenter(WordsRepositoryImpl(DictionaryApiHolder.dictionaryApiService))
+        MainPresenter(
+            WordsRepositoryImpl(DictionaryApiHolder.dictionaryApiService),
+            ThemeSharedPreferencesWrapper(this)
+        )
     }
 
     private lateinit var binding: ActivityMainBinding
@@ -36,6 +42,9 @@ class MainActivity : MvpAppCompatActivity(), MainView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        presenter.applyTheme()
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -87,6 +96,18 @@ class MainActivity : MvpAppCompatActivity(), MainView {
         showToast(message)
     }
 
+    override fun enableNightMode(isNightModeEnabled: Boolean) {
+        if (isNightModeEnabled) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+    }
+
+    override fun changeDayNightMode() {
+        recreate()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main, menu)
 
@@ -103,5 +124,14 @@ class MainActivity : MvpAppCompatActivity(), MainView {
         })
 
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == R.id.action_lamp) {
+            presenter.changeDayNightMode()
+            true
+        } else {
+            super.onOptionsItemSelected(item)
+        }
     }
 }

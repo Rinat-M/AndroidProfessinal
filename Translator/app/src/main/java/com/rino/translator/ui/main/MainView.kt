@@ -15,4 +15,9 @@ interface MainView : MvpView {
     @Skip
     fun showMessage(message: String)
 
+    fun enableNightMode(isNightModeEnabled: Boolean)
+
+    @Skip
+    fun changeDayNightMode()
+
 }

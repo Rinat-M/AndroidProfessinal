@@ -4,11 +4,13 @@ import android.util.Log
 import com.rino.translator.core.model.ScreenState
 import com.rino.translator.core.model.Word
 import com.rino.translator.core.repository.WordsRepository
+import com.rino.translator.wrappers.ThemeSharedPreferencesWrapper
 import io.reactivex.rxjava3.disposables.Disposable
 import moxy.MvpPresenter
 
 class MainPresenter(
-    private val wordsRepository: WordsRepository
+    private val wordsRepository: WordsRepository,
+    private val themeSharedPreferencesWrapper: ThemeSharedPreferencesWrapper
 ) : MvpPresenter<MainView>() {
 
     companion object {
@@ -32,6 +34,16 @@ class MainPresenter(
 
     fun onUserClicked(word: Word?) {
         word?.text?.let { viewState.showMessage(it) }
+    }
+
+    fun applyTheme() {
+        viewState.enableNightMode(themeSharedPreferencesWrapper.isNightModeEnabled)
+    }
+
+    fun changeDayNightMode() {
+        themeSharedPreferencesWrapper.isNightModeEnabled = !themeSharedPreferencesWrapper.isNightModeEnabled
+        applyTheme()
+        viewState.changeDayNightMode()
     }
 
     override fun onDestroy() {

@@ -10,4 +10,11 @@
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="ifRoom" />
 
+    <item
+        android:id="@+id/action_lamp"
+        android:icon="@drawable/ic_lamp"
+        android:orderInCategory="5"
+        android:title="@string/day_night"
+        app:showAsAction="ifRoom" />
+
 </menu>
