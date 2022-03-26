@@ -38,7 +38,7 @@ object DictionaryApiHolder {
     private fun getHttpLoggingInterceptor(): HttpLoggingInterceptor? {
         return if (BuildConfig.DEBUG) {
             HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BASIC
+                level = HttpLoggingInterceptor.Level.BODY
             }
         } else {
             null
