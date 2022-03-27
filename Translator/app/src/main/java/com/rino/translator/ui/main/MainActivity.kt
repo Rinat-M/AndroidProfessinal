@@ -32,9 +32,7 @@ class MainActivity : MvpAppCompatActivity(), MainView {
     }
 
     private lateinit var binding: ActivityMainBinding
-
-    private var _includeBinding: ProgressBarAndErrorMsgBinding? = null
-    private val includeBinding get() = _includeBinding!!
+    private lateinit var includeBinding: ProgressBarAndErrorMsgBinding
 
     private val wordsAdapter by lazy {
         WordsAdapter(GlideImageLoader(), presenter::onUserClicked)
@@ -48,7 +46,7 @@ class MainActivity : MvpAppCompatActivity(), MainView {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        _includeBinding = ProgressBarAndErrorMsgBinding.bind(binding.root)
+        includeBinding = ProgressBarAndErrorMsgBinding.bind(binding.root)
 
         with(binding.wordsRecyclerView) {
             layoutManager = LinearLayoutManager(context)
@@ -108,10 +106,10 @@ class MainActivity : MvpAppCompatActivity(), MainView {
         recreate()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main, menu)
 
-        val search = menu!!.findItem(R.id.action_search)
+        val search = menu.findItem(R.id.action_search)
         val searchView = search.actionView as SearchView
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {

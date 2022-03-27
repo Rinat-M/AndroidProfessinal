@@ -5,6 +5,7 @@ import com.rino.translator.core.model.ScreenState
 import com.rino.translator.core.model.Word
 import com.rino.translator.core.repository.WordsRepository
 import com.rino.translator.wrappers.ThemeSharedPreferencesWrapper
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
 import moxy.MvpPresenter
 
@@ -21,6 +22,7 @@ class MainPresenter(
 
     fun search(word: String) {
         wordsDisposable = wordsRepository.findWordsWithMeanings(word)
+            .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { viewState.updateList(ScreenState.Loading) }
             .subscribe(
                 { words -> viewState.updateList(ScreenState.Success(words)) },
