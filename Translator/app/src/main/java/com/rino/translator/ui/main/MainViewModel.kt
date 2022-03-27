@@ -33,6 +33,9 @@ class MainViewModel @Inject constructor(
     private val _themeChanged: MutableLiveData<Event<Boolean>> = MutableLiveData()
     val themeChanged: LiveData<Event<Boolean>> get() = _themeChanged
 
+    private val _showNoInternetDialog: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    val showNoInternetDialog: LiveData<Event<Boolean>> get() = _showNoInternetDialog
+
     private lateinit var wordsDisposable: Disposable
 
     fun search(word: String) {
@@ -58,6 +61,10 @@ class MainViewModel @Inject constructor(
             !themeSharedPreferencesWrapper.isNightModeEnabled
 
         _themeChanged.value = Event(themeSharedPreferencesWrapper.isNightModeEnabled)
+    }
+
+    fun showNoInternetDialog() {
+        _showNoInternetDialog.value = Event(true)
     }
 
     override fun onCleared() {

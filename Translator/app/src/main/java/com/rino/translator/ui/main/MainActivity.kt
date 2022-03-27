@@ -3,6 +3,7 @@ package com.rino.translator.ui.main
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
@@ -15,6 +16,7 @@ import com.rino.translator.core.model.ScreenState
 import com.rino.translator.core.model.Word
 import com.rino.translator.databinding.ActivityMainBinding
 import com.rino.translator.databinding.ProgressBarAndErrorMsgBinding
+import com.rino.translator.network.isOnline
 import com.rino.translator.ui.base.GlideImageLoader
 import com.rino.translator.ui.main.adapter.WordsAdapter
 import com.rino.translator.ui.showToast
@@ -33,6 +35,14 @@ class MainActivity : AppCompatActivity() {
 
     private val wordsAdapter by lazy {
         WordsAdapter(GlideImageLoader(), viewModel::onUserClicked)
+    }
+
+    private val noInternetDialog: AlertDialog by lazy {
+        AlertDialog.Builder(this@MainActivity)
+            .setTitle(R.string.dialog_title_device_is_offline)
+            .setMessage(R.string.dialog_message_device_is_offline)
+            .setPositiveButton(android.R.string.ok, null)
+            .create()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,6 +83,10 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.themeChanged.observe(this) { themeChangedEvent ->
             themeChangedEvent.getContentIfNotHandled()?.let { recreate() }
+        }
+
+        viewModel.showNoInternetDialog.observe(this) { event ->
+            event.getContentIfNotHandled()?.let { noInternetDialog.show() }
         }
     }
 
@@ -124,7 +138,12 @@ class MainActivity : AppCompatActivity() {
             override fun onQueryTextSubmit(query: String?): Boolean = true
 
             override fun onQueryTextChange(query: String?): Boolean {
-                viewModel.search(query ?: "")
+                if (isOnline(this@MainActivity)) {
+                    viewModel.search(query ?: "")
+                } else {
+                    viewModel.showNoInternetDialog()
+                }
+
                 return true
             }
         })
