@@ -13,16 +13,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.rino.translator.R
 import com.rino.translator.core.model.ScreenState
 import com.rino.translator.core.model.Word
-import com.rino.translator.core.repository.WordsRepositoryImpl
 import com.rino.translator.databinding.ActivityMainBinding
 import com.rino.translator.databinding.ProgressBarAndErrorMsgBinding
-import com.rino.translator.network.DictionaryApiHolder
 import com.rino.translator.ui.base.GlideImageLoader
 import com.rino.translator.ui.main.adapter.WordsAdapter
 import com.rino.translator.ui.showToast
-import com.rino.translator.wrappers.ThemeSharedPreferencesWrapper
+import dagger.android.AndroidInjection
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
+
+    @Inject
+    internal lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private lateinit var viewModel: MainViewModel
 
@@ -34,10 +36,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val viewModelFactory = MainViewModelProviderFactory(
-            WordsRepositoryImpl(DictionaryApiHolder.dictionaryApiService),
-            ThemeSharedPreferencesWrapper(this)
-        )
+        AndroidInjection.inject(this)
 
         viewModel = ViewModelProvider(this, viewModelFactory)
             .get(MainViewModel::class.java)

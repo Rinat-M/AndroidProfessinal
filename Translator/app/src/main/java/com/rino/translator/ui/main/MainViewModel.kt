@@ -11,8 +11,9 @@ import com.rino.translator.core.repository.WordsRepository
 import com.rino.translator.wrappers.ThemeSharedPreferencesWrapper
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
+import javax.inject.Inject
 
-class MainViewModel(
+class MainViewModel @Inject constructor(
     private val wordsRepository: WordsRepository,
     private val themeSharedPreferencesWrapper: ThemeSharedPreferencesWrapper
 ) : ViewModel() {

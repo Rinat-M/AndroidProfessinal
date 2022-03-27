@@ -4,10 +4,11 @@ import com.rino.translator.core.model.Word
 import com.rino.translator.network.DictionaryApiService
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
+import javax.inject.Inject
 
-class WordsRepositoryImpl(
+class WordsRepositoryImpl @Inject constructor(
     private val dictionaryApiService: DictionaryApiService
-): WordsRepository {
+) : WordsRepository {
 
     override fun findWordsWithMeanings(word: String): Single<List<Word>> {
         return dictionaryApiService.search(word)
