@@ -3,9 +3,11 @@ package com.rino.translator.ui.main
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rino.translator.R
@@ -19,29 +21,30 @@ import com.rino.translator.ui.base.GlideImageLoader
 import com.rino.translator.ui.main.adapter.WordsAdapter
 import com.rino.translator.ui.showToast
 import com.rino.translator.wrappers.ThemeSharedPreferencesWrapper
-import moxy.MvpAppCompatActivity
-import moxy.ktx.moxyPresenter
 
-class MainActivity : MvpAppCompatActivity(), MainView {
+class MainActivity : AppCompatActivity() {
 
-    private val presenter by moxyPresenter {
-        MainPresenter(
-            WordsRepositoryImpl(DictionaryApiHolder.dictionaryApiService),
-            ThemeSharedPreferencesWrapper(this)
-        )
-    }
+    private lateinit var viewModel: MainViewModel
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var includeBinding: ProgressBarAndErrorMsgBinding
 
     private val wordsAdapter by lazy {
-        WordsAdapter(GlideImageLoader(), presenter::onUserClicked)
+        WordsAdapter(GlideImageLoader(), viewModel::onUserClicked)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        val viewModelFactory = MainViewModelProviderFactory(
+            WordsRepositoryImpl(DictionaryApiHolder.dictionaryApiService),
+            ThemeSharedPreferencesWrapper(this)
+        )
 
-        presenter.applyTheme()
+        viewModel = ViewModelProvider(this, viewModelFactory)
+            .get(MainViewModel::class.java)
+
+        applyTheme()
+
+        super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -58,9 +61,31 @@ class MainActivity : MvpAppCompatActivity(), MainView {
             )
             adapter = wordsAdapter
         }
+
+        subscribeToViewModel()
     }
 
-    override fun updateList(state: ScreenState<List<Word>>) {
+    private fun subscribeToViewModel() {
+        viewModel.words.observe(this) { state -> state?.let { updateList(it) } }
+
+        viewModel.message.observe(this) { messageEvent ->
+            messageEvent.getContentIfNotHandled()?.let { showToast(it) }
+        }
+
+        viewModel.themeChanged.observe(this) { themeChangedEvent ->
+            themeChangedEvent.getContentIfNotHandled()?.let { recreate() }
+        }
+    }
+
+    private fun applyTheme() {
+        if (viewModel.isNightModeEnabled) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+    }
+
+    private fun updateList(state: ScreenState<List<Word>>) {
         when (state) {
             is ScreenState.Loading -> {
                 wordsAdapter.submitList(null)
@@ -90,22 +115,6 @@ class MainActivity : MvpAppCompatActivity(), MainView {
         }
     }
 
-    override fun showMessage(message: String) {
-        showToast(message)
-    }
-
-    override fun enableNightMode(isNightModeEnabled: Boolean) {
-        if (isNightModeEnabled) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        }
-    }
-
-    override fun changeDayNightMode() {
-        recreate()
-    }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main, menu)
 
@@ -116,7 +125,7 @@ class MainActivity : MvpAppCompatActivity(), MainView {
             override fun onQueryTextSubmit(query: String?): Boolean = true
 
             override fun onQueryTextChange(query: String?): Boolean {
-                presenter.search(query ?: "")
+                viewModel.search(query ?: "")
                 return true
             }
         })
@@ -126,7 +135,7 @@ class MainActivity : MvpAppCompatActivity(), MainView {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return if (item.itemId == R.id.action_lamp) {
-            presenter.changeDayNightMode()
+            viewModel.changeDayNightMode()
             true
         } else {
             super.onOptionsItemSelected(item)
