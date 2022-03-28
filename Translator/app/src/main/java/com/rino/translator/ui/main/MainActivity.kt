@@ -3,6 +3,7 @@ package com.rino.translator.ui.main
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -16,8 +17,9 @@ import com.rino.translator.core.model.ScreenState
 import com.rino.translator.core.model.Word
 import com.rino.translator.databinding.ActivityMainBinding
 import com.rino.translator.databinding.ProgressBarAndErrorMsgBinding
+import com.rino.translator.di.viewmodel.SavedStateViewModelAssistedFactory
 import com.rino.translator.network.isOnline
-import com.rino.translator.ui.base.GlideImageLoader
+import com.rino.translator.ui.base.ImageLoader
 import com.rino.translator.ui.main.adapter.WordsAdapter
 import com.rino.translator.ui.showToast
 import dagger.android.AndroidInjection
@@ -26,7 +28,10 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
 
     @Inject
-    internal lateinit var viewModelFactory: ViewModelProvider.Factory
+    lateinit var assistedFactory: SavedStateViewModelAssistedFactory
+
+    @Inject
+    lateinit var imageLoader: ImageLoader<ImageView>
 
     private lateinit var viewModel: MainViewModel
 
@@ -34,7 +39,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var includeBinding: ProgressBarAndErrorMsgBinding
 
     private val wordsAdapter by lazy {
-        WordsAdapter(GlideImageLoader(), viewModel::onUserClicked)
+        WordsAdapter(imageLoader, viewModel::onUserClicked)
     }
 
     private val noInternetDialog: AlertDialog by lazy {
@@ -48,12 +53,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
 
-        viewModel = ViewModelProvider(this, viewModelFactory)
+        super.onCreate(savedInstanceState)
+
+        viewModel = ViewModelProvider(this, assistedFactory.create(this))
             .get(MainViewModel::class.java)
 
         applyTheme()
-
-        super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

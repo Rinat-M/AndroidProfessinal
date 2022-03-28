@@ -24,4 +24,5 @@ internal abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(MainViewModel::class)
     protected abstract fun mainViewModel(mainViewModel: MainViewModel): ViewModel
+
 }

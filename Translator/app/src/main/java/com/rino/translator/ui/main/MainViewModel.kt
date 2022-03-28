@@ -3,11 +3,12 @@ package com.rino.translator.ui.main
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.SavedStateHandle
 import com.rino.translator.core.model.Event
 import com.rino.translator.core.model.ScreenState
 import com.rino.translator.core.model.Word
 import com.rino.translator.core.repository.WordsRepository
+import com.rino.translator.di.viewmodel.SavedStateViewModel
 import com.rino.translator.wrappers.ThemeSharedPreferencesWrapper
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
@@ -16,7 +17,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val wordsRepository: WordsRepository,
     private val themeSharedPreferencesWrapper: ThemeSharedPreferencesWrapper
-) : ViewModel() {
+) : SavedStateViewModel() {
 
     companion object {
         private const val TAG = "MainViewModel"
@@ -36,9 +37,21 @@ class MainViewModel @Inject constructor(
     private val _showNoInternetDialog: MutableLiveData<Event<Boolean>> = MutableLiveData()
     val showNoInternetDialog: LiveData<Event<Boolean>> get() = _showNoInternetDialog
 
+    private lateinit var query: MutableLiveData<String>
+
     private lateinit var wordsDisposable: Disposable
 
+    override fun init(savedStateHandle: SavedStateHandle) {
+        query = savedStateHandle.getLiveData("query")
+        query.value?.let { restoredQuery ->
+            Log.d(TAG, "Restored query from SavedStateHandle: $restoredQuery")
+            search(restoredQuery)
+        }
+    }
+
     fun search(word: String) {
+        query.postValue(word)
+
         wordsDisposable = wordsRepository.findWordsWithMeanings(word)
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { _words.value = ScreenState.Loading }
