@@ -3,45 +3,62 @@ package com.rino.translator.ui.main
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ImageView
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rino.translator.R
 import com.rino.translator.core.model.ScreenState
 import com.rino.translator.core.model.Word
-import com.rino.translator.core.repository.WordsRepositoryImpl
 import com.rino.translator.databinding.ActivityMainBinding
 import com.rino.translator.databinding.ProgressBarAndErrorMsgBinding
-import com.rino.translator.network.DictionaryApiHolder
-import com.rino.translator.ui.base.GlideImageLoader
+import com.rino.translator.di.viewmodel.SavedStateViewModelAssistedFactory
+import com.rino.translator.network.isOnline
+import com.rino.translator.ui.base.ImageLoader
 import com.rino.translator.ui.main.adapter.WordsAdapter
 import com.rino.translator.ui.showToast
-import com.rino.translator.wrappers.ThemeSharedPreferencesWrapper
-import moxy.MvpAppCompatActivity
-import moxy.ktx.moxyPresenter
+import dagger.android.AndroidInjection
+import javax.inject.Inject
 
-class MainActivity : MvpAppCompatActivity(), MainView {
+class MainActivity : AppCompatActivity() {
 
-    private val presenter by moxyPresenter {
-        MainPresenter(
-            WordsRepositoryImpl(DictionaryApiHolder.dictionaryApiService),
-            ThemeSharedPreferencesWrapper(this)
-        )
-    }
+    @Inject
+    lateinit var assistedFactory: SavedStateViewModelAssistedFactory
+
+    @Inject
+    lateinit var imageLoader: ImageLoader<ImageView>
+
+    private lateinit var viewModel: MainViewModel
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var includeBinding: ProgressBarAndErrorMsgBinding
 
     private val wordsAdapter by lazy {
-        WordsAdapter(GlideImageLoader(), presenter::onUserClicked)
+        WordsAdapter(imageLoader, viewModel::onUserClicked)
+    }
+
+    private val noInternetDialog: AlertDialog by lazy {
+        AlertDialog.Builder(this@MainActivity)
+            .setTitle(R.string.dialog_title_device_is_offline)
+            .setMessage(R.string.dialog_message_device_is_offline)
+            .setPositiveButton(android.R.string.ok, null)
+            .create()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
+
         super.onCreate(savedInstanceState)
 
-        presenter.applyTheme()
+        viewModel = ViewModelProvider(this, assistedFactory.create(this))
+            .get(MainViewModel::class.java)
+
+        applyTheme()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -58,9 +75,35 @@ class MainActivity : MvpAppCompatActivity(), MainView {
             )
             adapter = wordsAdapter
         }
+
+        subscribeToViewModel()
     }
 
-    override fun updateList(state: ScreenState<List<Word>>) {
+    private fun subscribeToViewModel() {
+        viewModel.words.observe(this) { state -> state?.let { updateList(it) } }
+
+        viewModel.message.observe(this) { messageEvent ->
+            messageEvent.getContentIfNotHandled()?.let { showToast(it) }
+        }
+
+        viewModel.themeChanged.observe(this) { themeChangedEvent ->
+            themeChangedEvent.getContentIfNotHandled()?.let { recreate() }
+        }
+
+        viewModel.showNoInternetDialog.observe(this) { event ->
+            event.getContentIfNotHandled()?.let { noInternetDialog.show() }
+        }
+    }
+
+    private fun applyTheme() {
+        if (viewModel.isNightModeEnabled) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+    }
+
+    private fun updateList(state: ScreenState<List<Word>>) {
         when (state) {
             is ScreenState.Loading -> {
                 wordsAdapter.submitList(null)
@@ -90,22 +133,6 @@ class MainActivity : MvpAppCompatActivity(), MainView {
         }
     }
 
-    override fun showMessage(message: String) {
-        showToast(message)
-    }
-
-    override fun enableNightMode(isNightModeEnabled: Boolean) {
-        if (isNightModeEnabled) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        }
-    }
-
-    override fun changeDayNightMode() {
-        recreate()
-    }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main, menu)
 
@@ -116,7 +143,12 @@ class MainActivity : MvpAppCompatActivity(), MainView {
             override fun onQueryTextSubmit(query: String?): Boolean = true
 
             override fun onQueryTextChange(query: String?): Boolean {
-                presenter.search(query ?: "")
+                if (isOnline(this@MainActivity)) {
+                    viewModel.search(query ?: "")
+                } else {
+                    viewModel.showNoInternetDialog()
+                }
+
                 return true
             }
         })
@@ -126,7 +158,7 @@ class MainActivity : MvpAppCompatActivity(), MainView {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return if (item.itemId == R.id.action_lamp) {
-            presenter.changeDayNightMode()
+            viewModel.changeDayNightMode()
             true
         } else {
             super.onOptionsItemSelected(item)
