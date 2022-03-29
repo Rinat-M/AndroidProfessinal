@@ -4,20 +4,20 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
 import com.rino.translator.core.model.Event
 import com.rino.translator.core.model.ScreenState
 import com.rino.translator.core.model.Word
 import com.rino.translator.core.repository.WordsRepository
-import com.rino.translator.di.viewmodel.SavedStateViewModel
 import com.rino.translator.wrappers.ThemeSharedPreferencesWrapper
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
-import javax.inject.Inject
 
-class MainViewModel @Inject constructor(
+class MainViewModel(
     private val wordsRepository: WordsRepository,
-    private val themeSharedPreferencesWrapper: ThemeSharedPreferencesWrapper
-) : SavedStateViewModel() {
+    private val themeSharedPreferencesWrapper: ThemeSharedPreferencesWrapper,
+    savedStateHandle: SavedStateHandle
+) : ViewModel() {
 
     companion object {
         private const val TAG = "MainViewModel"
@@ -37,12 +37,11 @@ class MainViewModel @Inject constructor(
     private val _showNoInternetDialog: MutableLiveData<Event<Boolean>> = MutableLiveData()
     val showNoInternetDialog: LiveData<Event<Boolean>> get() = _showNoInternetDialog
 
-    private lateinit var query: MutableLiveData<String>
-
     private lateinit var wordsDisposable: Disposable
 
-    override fun init(savedStateHandle: SavedStateHandle) {
-        query = savedStateHandle.getLiveData("query")
+    private val query: MutableLiveData<String> = savedStateHandle.getLiveData("query")
+
+    init {
         query.value?.let { restoredQuery ->
             Log.d(TAG, "Restored query from SavedStateHandle: $restoredQuery")
             search(restoredQuery)

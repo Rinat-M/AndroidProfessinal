@@ -4,9 +4,8 @@ import com.rino.translator.core.model.Word
 import com.rino.translator.network.DictionaryApiService
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
-import javax.inject.Inject
 
-class WordsRepositoryImpl @Inject constructor(
+class WordsRepositoryImpl(
     private val dictionaryApiService: DictionaryApiService
 ) : WordsRepository {
 
