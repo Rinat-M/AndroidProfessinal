@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rino.translator.R
@@ -20,6 +21,7 @@ import com.rino.translator.network.isOnline
 import com.rino.translator.ui.base.ImageLoader
 import com.rino.translator.ui.main.adapter.WordsAdapter
 import com.rino.translator.ui.showToast
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
@@ -68,7 +70,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun subscribeToViewModel() {
-        viewModel.words.observe(this) { state -> state?.let { updateList(it) } }
+        viewModel.words.observe(this) { state ->
+            state?.let { data ->
+                viewModel.viewModelScope.launch {
+                    updateList(data)
+                }
+            }
+        }
 
         viewModel.message.observe(this) { messageEvent ->
             messageEvent.getContentIfNotHandled()?.let { showToast(it) }
