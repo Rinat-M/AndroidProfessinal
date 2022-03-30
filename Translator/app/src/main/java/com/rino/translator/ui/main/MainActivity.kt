@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rino.translator.R
@@ -17,23 +17,18 @@ import com.rino.translator.core.model.ScreenState
 import com.rino.translator.core.model.Word
 import com.rino.translator.databinding.ActivityMainBinding
 import com.rino.translator.databinding.ProgressBarAndErrorMsgBinding
-import com.rino.translator.di.viewmodel.SavedStateViewModelAssistedFactory
 import com.rino.translator.network.isOnline
 import com.rino.translator.ui.base.ImageLoader
 import com.rino.translator.ui.main.adapter.WordsAdapter
 import com.rino.translator.ui.showToast
-import dagger.android.AndroidInjection
-import javax.inject.Inject
+import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
 class MainActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var assistedFactory: SavedStateViewModelAssistedFactory
-
-    @Inject
-    lateinit var imageLoader: ImageLoader<ImageView>
-
-    private lateinit var viewModel: MainViewModel
+    private val imageLoader: ImageLoader<ImageView> by inject()
+    private val viewModel: MainViewModel by stateViewModel()
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var includeBinding: ProgressBarAndErrorMsgBinding
@@ -51,12 +46,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
-
         super.onCreate(savedInstanceState)
-
-        viewModel = ViewModelProvider(this, assistedFactory.create(this))
-            .get(MainViewModel::class.java)
 
         applyTheme()
 
@@ -80,7 +70,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun subscribeToViewModel() {
-        viewModel.words.observe(this) { state -> state?.let { updateList(it) } }
+        viewModel.words.observe(this) { state ->
+            state?.let { data ->
+                viewModel.viewModelScope.launch {
+                    updateList(data)
+                }
+            }
+        }
 
         viewModel.message.observe(this) { messageEvent ->
             messageEvent.getContentIfNotHandled()?.let { showToast(it) }
