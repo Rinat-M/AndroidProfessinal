@@ -5,51 +5,105 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.gb.stopwatch.core.Constants
+import com.gb.stopwatch.core.model.StopWatch
 import com.gb.stopwatch.usecase.StopwatchStateHolder
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class MainViewModel(
-    private val stopwatchStateHolder: StopwatchStateHolder
+    private val stopwatch1: StopwatchStateHolder,
+    private val stopwatch2: StopwatchStateHolder
 ) : ViewModel() {
 
-    private var job: Job? = null
+    private var job1: Job? = null
+    private val mutableTicker1 = MutableStateFlow(Constants.DEFAULT_TIME)
+    val ticker1: LiveData<String> = mutableTicker1.asLiveData()
 
-    private val mutableTicker = MutableStateFlow("")
+    private var job2: Job? = null
+    private val mutableTicker2 = MutableStateFlow(Constants.DEFAULT_TIME)
+    val ticker2: LiveData<String> = mutableTicker2.asLiveData()
 
-    val ticker: LiveData<String> = mutableTicker.asLiveData()
-
-    fun start() {
-        if (job == null) startJob()
-        stopwatchStateHolder.start()
-    }
-
-    private fun startJob() {
-        job = viewModelScope.launch {
-            while (isActive) {
-                mutableTicker.value = stopwatchStateHolder.getStringTimeRepresentation()
-                delay(20)
+    fun start(stopwatch: StopWatch) {
+        when (stopwatch) {
+            StopWatch.STOPWATCH1 -> {
+                if (job1 == null) startJob(stopwatch)
+                stopwatch1.start()
+            }
+            StopWatch.STOPWATCH2 -> {
+                if (job2 == null) startJob(stopwatch)
+                stopwatch2.start()
             }
         }
     }
 
-    fun pause() {
-        stopwatchStateHolder.pause()
-        stopJob()
+    private fun startJob(stopwatch: StopWatch) {
+        when (stopwatch) {
+            StopWatch.STOPWATCH1 -> {
+                job1 = viewModelScope.launch {
+                    while (isActive) {
+                        mutableTicker1.value = stopwatch1.getStringTimeRepresentation()
+                        delay(20)
+                    }
+                }
+            }
+            StopWatch.STOPWATCH2 -> {
+                job2 = viewModelScope.launch {
+                    while (isActive) {
+                        mutableTicker2.value = stopwatch2.getStringTimeRepresentation()
+                        delay(20)
+                    }
+                }
+            }
+        }
     }
 
-    fun stop() {
-        stopwatchStateHolder.stop()
-        stopJob()
-        clearValue()
+
+    fun pause(stopwatch: StopWatch) {
+        when (stopwatch) {
+            StopWatch.STOPWATCH1 -> {
+                stopwatch1.pause()
+                stopJob(stopwatch)
+            }
+            StopWatch.STOPWATCH2 -> {
+                stopwatch2.pause()
+                stopJob(stopwatch)
+            }
+        }
     }
 
-    private fun stopJob() {
-        job?.cancel()
-        job = null
+    fun stop(stopwatch: StopWatch) {
+        when (stopwatch) {
+            StopWatch.STOPWATCH1 -> {
+                stopwatch1.stop()
+                stopJob(stopwatch)
+                clearValue(stopwatch)
+            }
+            StopWatch.STOPWATCH2 -> {
+                stopwatch2.stop()
+                stopJob(stopwatch)
+                clearValue(stopwatch)
+            }
+        }
     }
 
-    private fun clearValue() {
-        mutableTicker.value = Constants.DEFAULT_TIME
+    private fun stopJob(stopwatch: StopWatch) {
+        when (stopwatch) {
+            StopWatch.STOPWATCH1 -> {
+                job1?.cancel()
+                job1 = null
+            }
+            StopWatch.STOPWATCH2 -> {
+                job2?.cancel()
+                job2 = null
+            }
+        }
     }
+
+    private fun clearValue(stopwatch: StopWatch) {
+        when (stopwatch) {
+            StopWatch.STOPWATCH1 -> mutableTicker1.value = Constants.DEFAULT_TIME
+            StopWatch.STOPWATCH2 -> mutableTicker2.value = Constants.DEFAULT_TIME
+        }
+    }
+
 }

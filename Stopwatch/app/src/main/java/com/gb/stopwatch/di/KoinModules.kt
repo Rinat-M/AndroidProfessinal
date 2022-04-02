@@ -24,7 +24,7 @@ val appModule = module {
             elapsedTimeCalculator = get()
         )
     }
-    single<StopwatchStateHolder> {
+    factory<StopwatchStateHolder> {
         StopwatchStateHolderImpl(
             stopwatchStateCalculator = get(),
             elapsedTimeCalculator = get(),
@@ -33,5 +33,5 @@ val appModule = module {
     }
 
     // ViewModels
-    viewModel { MainViewModel(stopwatchStateHolder = get()) }
+    viewModel { MainViewModel(stopwatch1 = get(), stopwatch2 = get()) }
 }
