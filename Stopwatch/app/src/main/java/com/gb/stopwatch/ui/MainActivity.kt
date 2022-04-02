@@ -2,21 +2,14 @@ package com.gb.stopwatch.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
-import com.gb.stopwatch.core.formatter.TimestampMillisecondsFormatterImpl
-import com.gb.stopwatch.core.provider.TimestampProviderImpl
 import com.gb.stopwatch.databinding.ActivityMainBinding
-import com.gb.stopwatch.usecase.ElapsedTimeCalculatorImpl
-import com.gb.stopwatch.usecase.StopwatchStateCalculatorImpl
-import com.gb.stopwatch.usecase.StopwatchStateHolderImpl
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    private val timestampProvider = TimestampProviderImpl()
-
-    private lateinit var mainViewModel: MainViewModel
+    private val mainViewModel: MainViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,23 +18,13 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        val viewModelProvider = MainViewModelProviderFactory(
-            StopwatchStateHolderImpl(
-                StopwatchStateCalculatorImpl(
-                    timestampProvider,
-                    ElapsedTimeCalculatorImpl(timestampProvider)
-                ),
-                ElapsedTimeCalculatorImpl(timestampProvider),
-                TimestampMillisecondsFormatterImpl()
-            )
-        )
+        subscribeOnViewModel()
 
-        mainViewModel = ViewModelProvider(this, viewModelProvider)[MainViewModel::class.java]
+        setListeners()
 
-        mainViewModel.ticker.observe(this) {
-            binding.textTime.text = it
-        }
+    }
 
+    private fun setListeners() {
         binding.buttonStart.setOnClickListener {
             mainViewModel.start()
         }
@@ -53,7 +36,12 @@ class MainActivity : AppCompatActivity() {
         binding.buttonStop.setOnClickListener {
             mainViewModel.stop()
         }
+    }
 
+    private fun subscribeOnViewModel() {
+        mainViewModel.ticker.observe(this) {
+            binding.textTime.text = it
+        }
     }
 }
 
