@@ -2,17 +2,13 @@ package com.gb.stopwatch.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.gb.stopwatch.core.formatter.TimestampMillisecondsFormatterImpl
 import com.gb.stopwatch.core.provider.TimestampProviderImpl
 import com.gb.stopwatch.databinding.ActivityMainBinding
 import com.gb.stopwatch.usecase.ElapsedTimeCalculatorImpl
 import com.gb.stopwatch.usecase.StopwatchStateCalculatorImpl
 import com.gb.stopwatch.usecase.StopwatchStateHolderImpl
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,20 +16,7 @@ class MainActivity : AppCompatActivity() {
 
     private val timestampProvider = TimestampProviderImpl()
 
-    private val stopwatchListOrchestrator = StopwatchListOrchestrator(
-        StopwatchStateHolderImpl(
-            StopwatchStateCalculatorImpl(
-                timestampProvider,
-                ElapsedTimeCalculatorImpl(timestampProvider)
-            ),
-            ElapsedTimeCalculatorImpl(timestampProvider),
-            TimestampMillisecondsFormatterImpl()
-        ),
-        CoroutineScope(
-            Dispatchers.Main
-                    + SupervisorJob()
-        )
-    )
+    private lateinit var mainViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,25 +25,33 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        CoroutineScope(
-            Dispatchers.Main
-                    + SupervisorJob()
-        ).launch {
-            stopwatchListOrchestrator.ticker.collect {
-                binding.textTime.text = it
-            }
+        val viewModelProvider = MainViewModelProviderFactory(
+            StopwatchStateHolderImpl(
+                StopwatchStateCalculatorImpl(
+                    timestampProvider,
+                    ElapsedTimeCalculatorImpl(timestampProvider)
+                ),
+                ElapsedTimeCalculatorImpl(timestampProvider),
+                TimestampMillisecondsFormatterImpl()
+            )
+        )
+
+        mainViewModel = ViewModelProvider(this, viewModelProvider)[MainViewModel::class.java]
+
+        mainViewModel.ticker.observe(this) {
+            binding.textTime.text = it
         }
 
         binding.buttonStart.setOnClickListener {
-            stopwatchListOrchestrator.start()
+            mainViewModel.start()
         }
 
         binding.buttonPause.setOnClickListener {
-            stopwatchListOrchestrator.pause()
+            mainViewModel.pause()
         }
 
         binding.buttonStop.setOnClickListener {
-            stopwatchListOrchestrator.stop()
+            mainViewModel.stop()
         }
 
     }
