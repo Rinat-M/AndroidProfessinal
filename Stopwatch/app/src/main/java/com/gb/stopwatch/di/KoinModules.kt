@@ -2,6 +2,7 @@ package com.gb.stopwatch.di
 
 import com.gb.stopwatch.core.formatter.TimestampMillisecondsFormatter
 import com.gb.stopwatch.core.formatter.TimestampMillisecondsFormatterImpl
+import com.gb.stopwatch.core.provider.StringsProvider
 import com.gb.stopwatch.core.provider.TimestampProvider
 import com.gb.stopwatch.core.provider.TimestampProviderImpl
 import com.gb.stopwatch.ui.MainViewModel
@@ -12,6 +13,7 @@ import org.koin.dsl.module
 val appModule = module {
     // Providers
     single<TimestampProvider> { TimestampProviderImpl() }
+    single { StringsProvider(get()) }
 
     // Formatters
     single<TimestampMillisecondsFormatter> { TimestampMillisecondsFormatterImpl() }
@@ -33,5 +35,11 @@ val appModule = module {
     }
 
     // ViewModels
-    viewModel { MainViewModel(stopwatch1 = get(), stopwatch2 = get()) }
+    viewModel {
+        MainViewModel(
+            stopwatch1 = get(),
+            stopwatch2 = get(),
+            stringProvider = get()
+        )
+    }
 }

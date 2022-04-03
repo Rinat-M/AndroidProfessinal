@@ -4,23 +4,28 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.gb.stopwatch.core.Constants
 import com.gb.stopwatch.core.model.StopWatch
+import com.gb.stopwatch.core.provider.StringsProvider
 import com.gb.stopwatch.usecase.StopwatchStateHolder
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class MainViewModel(
     private val stopwatch1: StopwatchStateHolder,
-    private val stopwatch2: StopwatchStateHolder
+    private val stopwatch2: StopwatchStateHolder,
+    private val stringProvider: StringsProvider
 ) : ViewModel() {
 
+    companion object {
+        private const val MIN_DELAY_IN_MILLISECONDS = 20L
+    }
+
     private var job1: Job? = null
-    private val mutableTicker1 = MutableStateFlow(Constants.DEFAULT_TIME)
+    private val mutableTicker1 = MutableStateFlow(stringProvider.defaultTime)
     val ticker1: LiveData<String> = mutableTicker1.asLiveData()
 
     private var job2: Job? = null
-    private val mutableTicker2 = MutableStateFlow(Constants.DEFAULT_TIME)
+    private val mutableTicker2 = MutableStateFlow(stringProvider.defaultTime)
     val ticker2: LiveData<String> = mutableTicker2.asLiveData()
 
     fun start(stopwatch: StopWatch) {
@@ -42,7 +47,7 @@ class MainViewModel(
                 job1 = viewModelScope.launch {
                     while (isActive) {
                         mutableTicker1.value = stopwatch1.getStringTimeRepresentation()
-                        delay(20)
+                        delay(MIN_DELAY_IN_MILLISECONDS)
                     }
                 }
             }
@@ -50,7 +55,7 @@ class MainViewModel(
                 job2 = viewModelScope.launch {
                     while (isActive) {
                         mutableTicker2.value = stopwatch2.getStringTimeRepresentation()
-                        delay(20)
+                        delay(MIN_DELAY_IN_MILLISECONDS)
                     }
                 }
             }
@@ -101,8 +106,8 @@ class MainViewModel(
 
     private fun clearValue(stopwatch: StopWatch) {
         when (stopwatch) {
-            StopWatch.STOPWATCH1 -> mutableTicker1.value = Constants.DEFAULT_TIME
-            StopWatch.STOPWATCH2 -> mutableTicker2.value = Constants.DEFAULT_TIME
+            StopWatch.STOPWATCH1 -> mutableTicker1.value = stringProvider.defaultTime
+            StopWatch.STOPWATCH2 -> mutableTicker2.value = stringProvider.defaultTime
         }
     }
 
