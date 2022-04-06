@@ -6,6 +6,7 @@ import com.rino.translator.core.repository.WordsRepositoryImpl
 import com.rino.translator.database.DatabaseModule
 import com.rino.translator.ui.base.GlideImageLoader
 import com.rino.translator.ui.base.ImageLoader
+import com.rino.translator.ui.home.HomeViewModel
 import com.rino.translator.ui.main.MainViewModel
 import com.rino.translator.wrappers.ThemeSharedPreferencesWrapper
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -28,12 +29,13 @@ val appModule = module {
 
     //ViewModels
     viewModel {
-        MainViewModel(
+        HomeViewModel(
             wordsRepository = get(),
             themeSharedPreferencesWrapper = get(),
             savedStateHandle = get()
         )
     }
+    viewModel { MainViewModel(themeSharedPreferencesWrapper = get()) }
 
     // Database
     single { DatabaseModule.getTranslatorDatabase(context = get()) }

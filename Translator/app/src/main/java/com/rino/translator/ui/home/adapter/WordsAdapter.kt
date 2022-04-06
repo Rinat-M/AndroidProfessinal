@@ -1,4 +1,4 @@
-package com.rino.translator.ui.main.adapter
+package com.rino.translator.ui.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
