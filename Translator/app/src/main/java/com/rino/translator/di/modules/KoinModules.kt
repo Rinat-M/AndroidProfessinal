@@ -3,6 +3,7 @@ package com.rino.translator.di.modules
 import android.widget.ImageView
 import com.rino.translator.core.repository.WordsRepository
 import com.rino.translator.core.repository.WordsRepositoryImpl
+import com.rino.translator.database.DatabaseModule
 import com.rino.translator.ui.base.GlideImageLoader
 import com.rino.translator.ui.base.ImageLoader
 import com.rino.translator.ui.main.MainViewModel
@@ -33,4 +34,8 @@ val appModule = module {
             savedStateHandle = get()
         )
     }
+
+    // Database
+    single { DatabaseModule.getTranslatorDatabase(context = get()) }
+    single { DatabaseModule.getHistoryDao(database = get()) }
 }
