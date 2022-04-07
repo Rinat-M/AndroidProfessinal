@@ -10,6 +10,7 @@ object DatabaseModule {
         Room.databaseBuilder(context, TranslatorDatabase::class.java, DB_NAME)
             .build()
 
-    fun getHistoryDao(database: TranslatorDatabase) = database.historyDao
+    fun getHistorySetDao(database: TranslatorDatabase) = database.historySetDao
+    fun getHistoryGetDao(database: TranslatorDatabase) = database.historyGetDao
 
 }

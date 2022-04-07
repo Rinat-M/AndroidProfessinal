@@ -1,6 +1,8 @@
 package com.rino.translator.di.modules
 
 import android.widget.ImageView
+import com.rino.translator.core.repository.HistoryRepository
+import com.rino.translator.core.repository.HistoryRepositoryImpl
 import com.rino.translator.core.repository.WordsRepository
 import com.rino.translator.core.repository.WordsRepositoryImpl
 import com.rino.translator.database.DatabaseModule
@@ -20,6 +22,7 @@ val appModule = module {
 
     // Repository
     single<WordsRepository> { WordsRepositoryImpl(dictionaryApiService = get()) }
+    single<HistoryRepository> { HistoryRepositoryImpl(historySetDao = get()) }
 
     // Image loader
     single<ImageLoader<ImageView>> { GlideImageLoader() }
@@ -32,12 +35,14 @@ val appModule = module {
         HomeViewModel(
             wordsRepository = get(),
             themeSharedPreferencesWrapper = get(),
-            savedStateHandle = get()
+            savedStateHandle = get(),
+            historyRepository = get()
         )
     }
     viewModel { MainViewModel(themeSharedPreferencesWrapper = get()) }
 
     // Database
     single { DatabaseModule.getTranslatorDatabase(context = get()) }
-    single { DatabaseModule.getHistoryDao(database = get()) }
+    single { DatabaseModule.getHistorySetDao(database = get()) }
+    single { DatabaseModule.getHistoryGetDao(database = get()) }
 }

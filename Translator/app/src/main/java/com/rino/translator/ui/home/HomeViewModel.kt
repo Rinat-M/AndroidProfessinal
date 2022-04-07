@@ -1,21 +1,22 @@
 package com.rino.translator.ui.home
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.rino.translator.core.model.Event
 import com.rino.translator.core.model.ScreenState
 import com.rino.translator.core.model.Word
+import com.rino.translator.core.repository.HistoryRepository
 import com.rino.translator.core.repository.WordsRepository
 import com.rino.translator.wrappers.ThemeSharedPreferencesWrapper
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val wordsRepository: WordsRepository,
     private val themeSharedPreferencesWrapper: ThemeSharedPreferencesWrapper,
+    private val historyRepository: HistoryRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -64,8 +65,11 @@ class HomeViewModel(
             )
     }
 
-    fun onUserClicked(word: Word?) {
-        word?.text?.let { _message.value = Event(it) }
+    fun onUserClicked(word: Word) {
+        viewModelScope.launch(Dispatchers.IO) {
+            historyRepository.saveWordWithMeaningsToDb(word)
+            _message.postValue(Event(word.text))
+        }
     }
 
     fun changeDayNightMode() {

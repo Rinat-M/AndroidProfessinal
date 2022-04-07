@@ -6,10 +6,11 @@ import androidx.room.PrimaryKey
 import java.util.*
 
 @Entity
-class SearchHistory(
+data class Word(
     @PrimaryKey
+    val id: Long,
     @ColumnInfo(name = "word")
     val word: String,
-    @ColumnInfo(name = "searchDate")
-    val searchDate: Date = Date()
+    @ColumnInfo(name = "viewingDate")
+    val viewingDate: Date = Date()
 )
