@@ -13,4 +13,6 @@ interface HistoryRepository {
 
     fun getWordWithMeaningsById(wordId: Long): WordWithMeanings
 
+    fun getSearchHistoryByTextFlow(text: String): Flow<List<wordDb>>
+
 }

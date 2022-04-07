@@ -1,31 +1,40 @@
 package com.rino.translator.ui.history
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.*
 import com.rino.translator.core.model.Event
 import com.rino.translator.core.model.ScreenState
 import com.rino.translator.core.repository.HistoryRepository
 import com.rino.translator.database.entity.Word
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 class HistoryViewModel(
     private val historyRepository: HistoryRepository
 ) : ViewModel() {
 
-    private val _stateFlow: Flow<ScreenState<List<Word>>>
+    private val searchFlow = MutableStateFlow("")
 
     init {
-        _stateFlow = historyRepository.getAllSearchHistoryFlow()
-            .map { wordsHistory -> ScreenState.Success(wordsHistory) }
-            .flowOn(Dispatchers.IO)
+        viewModelScope.launch {
+            searchFlow
+                .debounce(300)
+                .distinctUntilChanged()
+                .flatMapLatest { query ->
+                    if (query.isBlank()) {
+                        historyRepository.getAllSearchHistoryFlow()
+                    } else {
+                        historyRepository.getSearchHistoryByTextFlow(query)
+                    }
+                }.flowOn(Dispatchers.IO)
+                .map { wordsHistory -> ScreenState.Success(wordsHistory) }
+                .collect { _state.value = it }
+        }
     }
 
-    val state: LiveData<ScreenState<List<Word>>> = _stateFlow.asLiveData()
+    private val _state: MutableLiveData<ScreenState<List<Word>>> =
+        MutableLiveData(ScreenState.Loading)
+    val state: LiveData<ScreenState<List<Word>>> = _state
 
     private val _showWordDetails: MutableLiveData<Event<Long>> = MutableLiveData()
     val showWordDetails: LiveData<Event<Long>> get() = _showWordDetails
@@ -33,4 +42,9 @@ class HistoryViewModel(
     fun onUserClicked(word: Word) {
         _showWordDetails.value = Event(word.id)
     }
+
+    fun search(word: String) {
+        searchFlow.value = word
+    }
+
 }

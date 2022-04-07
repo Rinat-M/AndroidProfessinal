@@ -18,4 +18,7 @@ interface HistoryGetDao {
     @Query(" SELECT * FROM Word WHERE id = :id")
     fun getWordWithMeaningsById(id: Long): WordWithMeanings
 
+    @Query("SELECT * FROM Word WHERE text LIKE :text || '%' ORDER BY viewingDate DESC")
+    fun getSearchHistoryByTextFlow(text: String): Flow<List<Word>>
+
 }

@@ -26,4 +26,7 @@ class HistoryRepositoryImpl(
     override fun getWordWithMeaningsById(wordId: Long): WordWithMeanings =
         historyGetDao.getWordWithMeaningsById(wordId)
 
+    override fun getSearchHistoryByTextFlow(text: String): Flow<List<wordDb>> =
+        historyGetDao.getSearchHistoryByTextFlow(text)
+
 }

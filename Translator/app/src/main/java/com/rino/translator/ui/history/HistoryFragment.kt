@@ -1,9 +1,8 @@
 package com.rino.translator.ui.history
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -34,6 +33,11 @@ class HistoryFragment : Fragment() {
 
     private val historyAdapter by lazy {
         HistoryAdapter(viewModel::onUserClicked)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
@@ -82,9 +86,6 @@ class HistoryFragment : Fragment() {
     private fun updateList(state: ScreenState<List<Word>>) {
         when (state) {
             is ScreenState.Loading -> {
-                historyAdapter.submitList(null)
-                historyAdapter.notifyDataSetChanged()
-
                 binding.visibilityGroup.isVisible = false
                 includeBinding.progressBar.isVisible = true
                 includeBinding.errorMsg.isVisible = false
@@ -107,6 +108,24 @@ class HistoryFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.history, menu)
+
+        val search = menu.findItem(R.id.action_search)
+        val searchView = search.actionView as SearchView
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean = true
+
+            override fun onQueryTextChange(query: String?): Boolean {
+                viewModel.search(query ?: "")
+                return true
+            }
+        })
+
+        return super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onDestroyView() {
