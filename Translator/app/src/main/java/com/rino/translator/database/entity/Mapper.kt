@@ -7,7 +7,7 @@ typealias wordDb = com.rino.translator.database.entity.Word
 typealias meaningDb = com.rino.translator.database.entity.Meaning
 
 val Word.dbModel
-    get() = wordDb(id = id, word = text)
+    get() = wordDb(id = id, text = text)
 
 val Meaning.dbModel
     get() = meaningDb(

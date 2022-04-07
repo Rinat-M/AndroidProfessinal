@@ -13,17 +13,17 @@ import com.rino.translator.ui.base.ImageLoader
 class WordsAdapter(
     private val imageLoader: ImageLoader<ImageView>,
     private val itemClickListener: (Word) -> Unit
-) : ListAdapter<Word, WordsAdapter.UserViewHolder>(WordItemCallback()) {
+) : ListAdapter<Word, WordsAdapter.WordViewHolder>(WordItemCallback()) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordViewHolder {
         val binding = WordItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return UserViewHolder(binding)
+        return WordViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: UserViewHolder, position: Int) =
+    override fun onBindViewHolder(holder: WordViewHolder, position: Int) =
         holder.bind(currentList[position])
 
-    inner class UserViewHolder(
+    inner class WordViewHolder(
         private val binding: WordItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -32,7 +32,7 @@ class WordsAdapter(
                 root.setOnClickListener { itemClickListener(word) }
                 header.text = word.text
 
-                word.meanings?.firstOrNull()?.let { meaning ->
+                word.meanings.firstOrNull()?.let { meaning ->
                     description.text = meaning.translation?.text
                     meaning.previewUrl?.let { imageLoader.loadInto("https:$it", binding.previewImage) }
                 }

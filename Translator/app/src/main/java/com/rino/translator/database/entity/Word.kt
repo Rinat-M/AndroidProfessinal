@@ -9,8 +9,8 @@ import java.util.*
 data class Word(
     @PrimaryKey
     val id: Long,
-    @ColumnInfo(name = "word")
-    val word: String,
+    @ColumnInfo(name = "text")
+    val text: String,
     @ColumnInfo(name = "viewingDate")
     val viewingDate: Date = Date()
 )

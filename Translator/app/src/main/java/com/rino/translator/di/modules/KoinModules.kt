@@ -8,6 +8,7 @@ import com.rino.translator.core.repository.WordsRepositoryImpl
 import com.rino.translator.database.DatabaseModule
 import com.rino.translator.ui.base.GlideImageLoader
 import com.rino.translator.ui.base.ImageLoader
+import com.rino.translator.ui.history.HistoryViewModel
 import com.rino.translator.ui.home.HomeViewModel
 import com.rino.translator.ui.main.MainViewModel
 import com.rino.translator.wrappers.ThemeSharedPreferencesWrapper
@@ -22,7 +23,12 @@ val appModule = module {
 
     // Repository
     single<WordsRepository> { WordsRepositoryImpl(dictionaryApiService = get()) }
-    single<HistoryRepository> { HistoryRepositoryImpl(historySetDao = get()) }
+    single<HistoryRepository> {
+        HistoryRepositoryImpl(
+            historySetDao = get(),
+            historyGetDao = get()
+        )
+    }
 
     // Image loader
     single<ImageLoader<ImageView>> { GlideImageLoader() }
@@ -40,6 +46,7 @@ val appModule = module {
         )
     }
     viewModel { MainViewModel(themeSharedPreferencesWrapper = get()) }
+    viewModel { HistoryViewModel(historyRepository = get()) }
 
     // Database
     single { DatabaseModule.getTranslatorDatabase(context = get()) }
