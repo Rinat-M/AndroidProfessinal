@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.details.WordDetailsFragment">
+
+    <TextView
+        android:id="@+id/word"
+        android:layout_width="@dimen/match_constraint"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/size_8"
+        android:textAlignment="center"
+        android:textSize="@dimen/text_size_large"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="School" />
+
+    <TextView
+        android:id="@+id/meanings_title"
+        android:layout_width="@dimen/match_constraint"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/size_8"
+        android:text="@string/meanings_title"
+        android:textAlignment="center"
+        android:textSize="@dimen/text_size_standard"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/word" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/meanings_recycler_view"
+        android:layout_width="@dimen/match_constraint"
+        android:layout_height="@dimen/match_constraint"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/meanings_title"
+        tools:listitem="@layout/meaning_item" />
+
+    <include layout="@layout/progress_bar_and_error_msg" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/visibilityGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="word,meanings_title,meanings_recycler_view" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

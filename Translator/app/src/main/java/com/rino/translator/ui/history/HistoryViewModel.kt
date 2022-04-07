@@ -1,8 +1,10 @@
 package com.rino.translator.ui.history
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import com.rino.translator.core.model.Event
 import com.rino.translator.core.model.ScreenState
 import com.rino.translator.core.repository.HistoryRepository
 import com.rino.translator.database.entity.Word
@@ -25,7 +27,10 @@ class HistoryViewModel(
 
     val state: LiveData<ScreenState<List<Word>>> = _stateFlow.asLiveData()
 
-    fun onUserClicked(word: Word) {
+    private val _showWordDetails: MutableLiveData<Event<Long>> = MutableLiveData()
+    val showWordDetails: LiveData<Event<Long>> get() = _showWordDetails
 
+    fun onUserClicked(word: Word) {
+        _showWordDetails.value = Event(word.id)
     }
 }

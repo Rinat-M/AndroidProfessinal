@@ -38,6 +38,9 @@ class HomeViewModel(
     private val _showNoInternetDialog: MutableLiveData<Event<Boolean>> = MutableLiveData()
     val showNoInternetDialog: LiveData<Event<Boolean>> get() = _showNoInternetDialog
 
+    private val _showWordDetails: MutableLiveData<Event<Long>> = MutableLiveData()
+    val showWordDetails: LiveData<Event<Long>> get() = _showWordDetails
+
     private lateinit var wordsDisposable: Disposable
 
     private val query: MutableLiveData<String> = savedStateHandle.getLiveData("query")
@@ -68,7 +71,7 @@ class HomeViewModel(
     fun onUserClicked(word: Word) {
         viewModelScope.launch(Dispatchers.IO) {
             historyRepository.saveWordWithMeaningsToDb(word)
-            _message.postValue(Event(word.text))
+            _showWordDetails.postValue(Event(word.id))
         }
     }
 

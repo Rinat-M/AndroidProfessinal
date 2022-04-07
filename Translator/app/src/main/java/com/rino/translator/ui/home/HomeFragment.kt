@@ -9,6 +9,7 @@ import androidx.core.app.ActivityCompat.recreate
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rino.translator.R
@@ -18,6 +19,7 @@ import com.rino.translator.databinding.FragmentHomeBinding
 import com.rino.translator.databinding.ProgressBarAndErrorMsgBinding
 import com.rino.translator.network.isOnline
 import com.rino.translator.ui.base.ImageLoader
+import com.rino.translator.ui.details.WordDetailsFragmentArgs
 import com.rino.translator.ui.home.adapter.WordsAdapter
 import com.rino.translator.ui.showToast
 import kotlinx.coroutines.launch
@@ -102,6 +104,16 @@ class HomeFragment : Fragment() {
 
         viewModel.showNoInternetDialog.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let { noInternetDialog.show() }
+        }
+
+        viewModel.showWordDetails.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let { wordId ->
+                val bundle = WordDetailsFragmentArgs(wordId).toBundle()
+                findNavController().navigate(
+                    R.id.action_navigation_home_to_word_details,
+                    bundle
+                )
+            }
         }
     }
 

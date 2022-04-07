@@ -8,6 +8,7 @@ import com.rino.translator.core.repository.WordsRepositoryImpl
 import com.rino.translator.database.DatabaseModule
 import com.rino.translator.ui.base.GlideImageLoader
 import com.rino.translator.ui.base.ImageLoader
+import com.rino.translator.ui.details.WordDetailsViewModel
 import com.rino.translator.ui.history.HistoryViewModel
 import com.rino.translator.ui.home.HomeViewModel
 import com.rino.translator.ui.main.MainViewModel
@@ -47,6 +48,12 @@ val appModule = module {
     }
     viewModel { MainViewModel(themeSharedPreferencesWrapper = get()) }
     viewModel { HistoryViewModel(historyRepository = get()) }
+    viewModel { parameters ->
+        WordDetailsViewModel(
+            historyRepository = get(),
+            wordId = parameters.get()
+        )
+    }
 
     // Database
     single { DatabaseModule.getTranslatorDatabase(context = get()) }
