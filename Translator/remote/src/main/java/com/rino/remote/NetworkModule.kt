@@ -1,7 +1,5 @@
-package com.rino.translator.di.modules
+package com.rino.remote
 
-import com.rino.translator.BuildConfig
-import com.rino.translator.network.DictionaryApiService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -15,23 +13,23 @@ object NetworkModule {
         return retrofit.create()
     }
 
-    fun getOkHttpClient(): OkHttpClient {
+    fun getOkHttpClient(isDebug: Boolean): OkHttpClient {
         return OkHttpClient.Builder().apply {
-            getHttpLoggingInterceptor()?.let { this.addInterceptor(it) }
+            getHttpLoggingInterceptor(isDebug)?.let { this.addInterceptor(it) }
         }.build()
     }
 
-    fun getRetrofit(okHttpClient: OkHttpClient): Retrofit {
+    fun getRetrofit(okHttpClient: OkHttpClient, baseUrl: String): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BuildConfig.DICTIONARY_BASE_URL)
+            .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .client(okHttpClient)
             .build()
     }
 
-    private fun getHttpLoggingInterceptor(): HttpLoggingInterceptor? {
-        return if (BuildConfig.DEBUG) {
+    private fun getHttpLoggingInterceptor(isDebug: Boolean): HttpLoggingInterceptor? {
+        return if (isDebug) {
             HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             }

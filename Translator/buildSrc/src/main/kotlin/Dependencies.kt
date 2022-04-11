@@ -8,12 +8,13 @@ object Config {
     const val KOTLIN_JVM_TARGET = "1.8"
     val JAVA_VERSION = JavaVersion.VERSION_1_8
 
-    const val VERSION_CODE = 24
-    const val VERSION_NAME = "1.4.1"
+    const val VERSION_CODE = 25
+    const val VERSION_NAME = "1.4.2"
 }
 
 object Modules {
     const val CORE = ":core"
+    const val REMOTE = ":remote"
 }
 
 object BuildTypes {

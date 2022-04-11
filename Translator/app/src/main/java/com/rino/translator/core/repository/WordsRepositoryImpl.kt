@@ -1,12 +1,12 @@
 package com.rino.translator.core.repository
 
 import com.rino.core.model.Word
-import com.rino.translator.network.DictionaryApiService
+import com.rino.remote.DictionaryApiService
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 
 class WordsRepositoryImpl(
-    private val dictionaryApiService: DictionaryApiService
+    private val dictionaryApiService: com.rino.remote.DictionaryApiService
 ) : WordsRepository {
 
     override fun findWordsWithMeanings(word: String): Single<List<Word>> {

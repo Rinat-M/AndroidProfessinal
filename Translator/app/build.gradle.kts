@@ -52,6 +52,7 @@ android {
 
 dependencies {
     implementation(project(Modules.CORE))
+    implementation(project(Modules.REMOTE))
 
     implementation(Libraries.CORE_KTX)
     implementation(Libraries.APPCOMPAT)
@@ -68,12 +69,9 @@ dependencies {
 
     // OkHttp
     implementation(Libraries.OKHTTP3)
-    implementation(Libraries.OKHTTP3_LOGGING)
 
     // Retrofit
     implementation(Libraries.RETROFIT2)
-    implementation(Libraries.RETROFIT2_CONVERTER_GSON)
-    implementation(Libraries.RETROFIT2_ADAPTER_RXJAVA3)
 
     // Glide
     implementation(Libraries.GLIDE)

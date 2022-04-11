@@ -1,4 +1,4 @@
-package com.rino.translator.network
+package com.rino.remote
 
 import com.rino.core.model.Word
 import io.reactivex.rxjava3.core.Single
