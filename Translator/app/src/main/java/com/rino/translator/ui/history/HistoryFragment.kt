@@ -9,7 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rino.translator.R
-import com.rino.translator.core.model.ScreenState
+import com.rino.core.model.ScreenState
 import com.rino.translator.database.entity.Word
 import com.rino.translator.databinding.FragmentHistoryBinding
 import com.rino.translator.databinding.ProgressBarAndErrorMsgBinding

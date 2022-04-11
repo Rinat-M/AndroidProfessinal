@@ -1,4 +1,4 @@
-package com.rino.translator.core.model
+package com.rino.core.model
 
 /**
  * Used as a wrapper for data that is exposed via a LiveData that represents an event.

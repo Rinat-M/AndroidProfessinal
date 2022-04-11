@@ -1,7 +1,7 @@
 package com.rino.translator.database.entity
 
-import com.rino.translator.core.model.Meaning
-import com.rino.translator.core.model.Word
+import com.rino.core.model.Word
+import com.rino.core.model.Meaning
 
 typealias wordDb = com.rino.translator.database.entity.Word
 typealias meaningDb = com.rino.translator.database.entity.Meaning

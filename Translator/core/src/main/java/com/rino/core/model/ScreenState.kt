@@ -1,4 +1,4 @@
-package com.rino.translator.core.model
+package com.rino.core.model
 
 sealed class ScreenState<out T> {
     data class Success<T>(val data: T) : ScreenState<T>()

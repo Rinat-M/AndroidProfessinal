@@ -1,8 +1,8 @@
 package com.rino.translator.ui.history
 
 import androidx.lifecycle.*
-import com.rino.translator.core.model.Event
-import com.rino.translator.core.model.ScreenState
+import com.rino.core.model.Event
+import com.rino.core.model.ScreenState
 import com.rino.translator.core.repository.HistoryRepository
 import com.rino.translator.database.entity.Word
 import kotlinx.coroutines.Dispatchers

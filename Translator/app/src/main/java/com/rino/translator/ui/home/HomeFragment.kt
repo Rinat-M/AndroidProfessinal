@@ -13,8 +13,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rino.translator.R
-import com.rino.translator.core.model.ScreenState
-import com.rino.translator.core.model.Word
+import com.rino.core.model.ScreenState
+import com.rino.core.model.Word
 import com.rino.translator.databinding.FragmentHomeBinding
 import com.rino.translator.databinding.ProgressBarAndErrorMsgBinding
 import com.rino.translator.network.isOnline

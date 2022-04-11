@@ -1,4 +1,4 @@
-package com.rino.translator.core.model
+package com.rino.core.model
 
 data class Word(
     val id: Long,

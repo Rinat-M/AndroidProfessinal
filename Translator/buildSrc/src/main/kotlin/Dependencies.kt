@@ -12,6 +12,10 @@ object Config {
     const val VERSION_NAME = "1.4.1"
 }
 
+object Modules {
+    const val CORE = ":core"
+}
+
 object BuildTypes {
     const val RELEASE = "release"
 }

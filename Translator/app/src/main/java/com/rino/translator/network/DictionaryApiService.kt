@@ -1,6 +1,6 @@
 package com.rino.translator.network
 
-import com.rino.translator.core.model.Word
+import com.rino.core.model.Word
 import io.reactivex.rxjava3.core.Single
 import retrofit2.http.GET
 import retrofit2.http.Query

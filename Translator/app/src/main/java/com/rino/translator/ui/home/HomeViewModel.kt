@@ -2,9 +2,9 @@ package com.rino.translator.ui.home
 
 import android.util.Log
 import androidx.lifecycle.*
-import com.rino.translator.core.model.Event
-import com.rino.translator.core.model.ScreenState
-import com.rino.translator.core.model.Word
+import com.rino.core.model.Event
+import com.rino.core.model.ScreenState
+import com.rino.core.model.Word
 import com.rino.translator.core.repository.HistoryRepository
 import com.rino.translator.core.repository.WordsRepository
 import com.rino.translator.wrappers.ThemeSharedPreferencesWrapper
