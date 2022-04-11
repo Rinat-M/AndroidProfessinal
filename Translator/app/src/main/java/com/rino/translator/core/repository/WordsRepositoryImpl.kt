@@ -6,7 +6,7 @@ import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 
 class WordsRepositoryImpl(
-    private val dictionaryApiService: com.rino.remote.DictionaryApiService
+    private val dictionaryApiService: DictionaryApiService
 ) : WordsRepository {
 
     override fun findWordsWithMeanings(word: String): Single<List<Word>> {

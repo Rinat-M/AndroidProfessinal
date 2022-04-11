@@ -7,7 +7,7 @@ import com.rino.translator.core.repository.HistoryRepository
 import com.rino.translator.core.repository.HistoryRepositoryImpl
 import com.rino.translator.core.repository.WordsRepository
 import com.rino.translator.core.repository.WordsRepositoryImpl
-import com.rino.translator.database.DatabaseModule
+import com.rino.database.DatabaseModule
 import com.rino.translator.ui.base.GlideImageLoader
 import com.rino.translator.ui.base.ImageLoader
 import com.rino.translator.ui.details.WordDetailsViewModel

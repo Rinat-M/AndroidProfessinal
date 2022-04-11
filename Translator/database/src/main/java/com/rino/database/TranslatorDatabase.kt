@@ -1,14 +1,14 @@
-package com.rino.translator.database
+package com.rino.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.rino.translator.database.converter.DateConverter
-import com.rino.translator.database.dao.HistoryGetDao
-import com.rino.translator.database.dao.HistorySetDao
-import com.rino.translator.database.entity.Meaning
-import com.rino.translator.database.entity.Word
-import com.rino.translator.database.entity.WordMeaningCrossRef
+import com.rino.database.converter.DateConverter
+import com.rino.database.dao.HistoryGetDao
+import com.rino.database.dao.HistorySetDao
+import com.rino.database.entity.Meaning
+import com.rino.database.entity.Word
+import com.rino.database.entity.WordMeaningCrossRef
 
 @Database(
     entities = [

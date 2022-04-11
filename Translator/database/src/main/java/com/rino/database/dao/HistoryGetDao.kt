@@ -1,9 +1,9 @@
-package com.rino.translator.database.dao
+package com.rino.database.dao
 
 import androidx.room.Dao
 import androidx.room.Query
-import com.rino.translator.database.entity.Word
-import com.rino.translator.database.entity.WordWithMeanings
+import com.rino.database.entity.Word
+import com.rino.database.entity.WordWithMeanings
 import kotlinx.coroutines.flow.Flow
 
 @Dao

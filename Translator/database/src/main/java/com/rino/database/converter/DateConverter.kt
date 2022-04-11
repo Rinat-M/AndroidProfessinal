@@ -1,4 +1,4 @@
-package com.rino.translator.database.converter
+package com.rino.database.converter
 
 import androidx.room.TypeConverter
 import java.util.*

@@ -1,4 +1,4 @@
-package com.rino.translator.database
+package com.rino.database
 
 import android.content.Context
 import androidx.room.Room

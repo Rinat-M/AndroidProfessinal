@@ -1,12 +1,12 @@
-package com.rino.translator.database.dao
+package com.rino.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Transaction
-import com.rino.translator.database.entity.Meaning
-import com.rino.translator.database.entity.Word
-import com.rino.translator.database.entity.WordMeaningCrossRef
+import com.rino.database.entity.Meaning
+import com.rino.database.entity.Word
+import com.rino.database.entity.WordMeaningCrossRef
 
 @Dao
 interface HistorySetDao {

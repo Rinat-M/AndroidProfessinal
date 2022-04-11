@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.rino.database.entity.Word
 import com.rino.translator.core.toString
-import com.rino.translator.database.entity.Word
 import com.rino.translator.databinding.HistoryItemBinding
 
 class HistoryAdapter(

@@ -53,6 +53,7 @@ android {
 dependencies {
     implementation(project(Modules.CORE))
     implementation(project(Modules.REMOTE))
+    implementation(project(Modules.DATABASE))
 
     implementation(Libraries.CORE_KTX)
     implementation(Libraries.APPCOMPAT)

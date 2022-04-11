@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rino.core.model.ScreenState
 import com.rino.translator.core.repository.HistoryRepository
-import com.rino.translator.database.entity.WordWithMeanings
+import com.rino.database.entity.WordWithMeanings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

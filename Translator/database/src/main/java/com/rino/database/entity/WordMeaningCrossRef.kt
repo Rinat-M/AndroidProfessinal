@@ -1,4 +1,4 @@
-package com.rino.translator.database.entity
+package com.rino.database.entity
 
 import androidx.room.Entity
 
