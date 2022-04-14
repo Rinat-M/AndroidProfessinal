@@ -6,7 +6,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.rino.translator.database.entity.Meaning
+import com.rino.database.entity.Meaning
 import com.rino.translator.databinding.MeaningItemBinding
 import com.rino.translator.ui.base.ImageLoader
 

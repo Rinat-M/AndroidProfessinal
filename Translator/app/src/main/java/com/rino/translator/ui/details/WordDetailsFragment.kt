@@ -10,8 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.rino.translator.core.model.ScreenState
-import com.rino.translator.database.entity.WordWithMeanings
+import com.rino.core.model.ScreenState
+import com.rino.database.entity.WordWithMeanings
 import com.rino.translator.databinding.FragmentWordDetailsBinding
 import com.rino.translator.databinding.ProgressBarAndErrorMsgBinding
 import com.rino.translator.ui.base.ImageLoader

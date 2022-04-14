@@ -6,7 +6,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.rino.translator.core.model.Word
+import com.rino.core.model.Word
 import com.rino.translator.databinding.WordItemBinding
 import com.rino.translator.ui.base.ImageLoader
 

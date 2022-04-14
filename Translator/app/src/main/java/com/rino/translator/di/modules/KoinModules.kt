@@ -1,11 +1,13 @@
 package com.rino.translator.di.modules
 
 import android.widget.ImageView
+import com.rino.remote.NetworkModule
+import com.rino.translator.BuildConfig
 import com.rino.translator.core.repository.HistoryRepository
 import com.rino.translator.core.repository.HistoryRepositoryImpl
 import com.rino.translator.core.repository.WordsRepository
 import com.rino.translator.core.repository.WordsRepositoryImpl
-import com.rino.translator.database.DatabaseModule
+import com.rino.database.DatabaseModule
 import com.rino.translator.ui.base.GlideImageLoader
 import com.rino.translator.ui.base.ImageLoader
 import com.rino.translator.ui.details.WordDetailsViewModel
@@ -18,8 +20,8 @@ import org.koin.dsl.module
 
 val appModule = module {
     // Network
-    single { NetworkModule.getOkHttpClient() }
-    single { NetworkModule.getRetrofit(okHttpClient = get()) }
+    single { NetworkModule.getOkHttpClient(isDebug = BuildConfig.DEBUG) }
+    single { NetworkModule.getRetrofit(okHttpClient = get(), baseUrl = BuildConfig.DICTIONARY_BASE_URL) }
     single { NetworkModule.getDictionaryApiService(retrofit = get()) }
 
     // Repository

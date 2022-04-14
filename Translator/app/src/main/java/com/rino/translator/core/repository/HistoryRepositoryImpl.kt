@@ -1,11 +1,11 @@
 package com.rino.translator.core.repository
 
-import com.rino.translator.core.model.Word
-import com.rino.translator.database.dao.HistoryGetDao
-import com.rino.translator.database.dao.HistorySetDao
-import com.rino.translator.database.entity.WordWithMeanings
-import com.rino.translator.database.entity.dbModel
-import com.rino.translator.database.entity.wordDb
+import com.rino.core.model.Word
+import com.rino.database.dao.HistoryGetDao
+import com.rino.database.dao.HistorySetDao
+import com.rino.database.entity.WordWithMeanings
+import com.rino.database.entity.dbModel
+import com.rino.database.entity.wordDb
 import kotlinx.coroutines.flow.Flow
 
 class HistoryRepositoryImpl(
