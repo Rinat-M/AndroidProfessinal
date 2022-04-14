@@ -13,21 +13,19 @@ import com.rino.translator.R
 import com.rino.translator.databinding.FragmentHistoryBinding
 import com.rino.translator.databinding.ProgressBarAndErrorMsgBinding
 import com.rino.translator.ui.base.BaseFragment
+import com.rino.translator.ui.base.viewBinding
 import com.rino.translator.ui.details.WordDetailsFragmentArgs
 import com.rino.translator.ui.history.adapter.HistoryAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class HistoryFragment : BaseFragment() {
+class HistoryFragment : BaseFragment(R.layout.fragment_history) {
 
     companion object {
         fun newInstance() = HistoryFragment()
     }
 
-    private var _binding: FragmentHistoryBinding? = null
-    private val binding get() = _binding!!
-
-    private var _includeBinding: ProgressBarAndErrorMsgBinding? = null
-    private val includeBinding get() = _includeBinding!!
+    private val binding: FragmentHistoryBinding by viewBinding()
+    private val includeBinding: ProgressBarAndErrorMsgBinding by viewBinding()
 
     private val viewModel: HistoryViewModel by viewModel()
 
@@ -38,16 +36,6 @@ class HistoryFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentHistoryBinding.inflate(inflater, container, false)
-        _includeBinding = ProgressBarAndErrorMsgBinding.bind(binding.root)
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -127,11 +115,4 @@ class HistoryFragment : BaseFragment() {
 
         return super.onCreateOptionsMenu(menu, inflater)
     }
-
-    override fun onDestroyView() {
-        _binding = null
-        _includeBinding = null
-        super.onDestroyView()
-    }
-
 }

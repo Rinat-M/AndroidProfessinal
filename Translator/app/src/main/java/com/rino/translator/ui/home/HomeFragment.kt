@@ -19,6 +19,7 @@ import com.rino.translator.databinding.ProgressBarAndErrorMsgBinding
 import com.rino.translator.network.isOnline
 import com.rino.translator.ui.base.BaseFragment
 import com.rino.translator.ui.base.ImageLoader
+import com.rino.translator.ui.base.viewBinding
 import com.rino.translator.ui.details.WordDetailsFragmentArgs
 import com.rino.translator.ui.home.adapter.WordsAdapter
 import com.rino.translator.ui.showToast
@@ -26,17 +27,14 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
-class HomeFragment : BaseFragment() {
+class HomeFragment : BaseFragment(R.layout.fragment_home) {
 
     companion object {
         fun newInstance() = HomeFragment()
     }
 
-    private var _binding: FragmentHomeBinding? = null
-    private val binding get() = _binding!!
-
-    private var _includeBinding: ProgressBarAndErrorMsgBinding? = null
-    private val includeBinding get() = _includeBinding!!
+    private val binding: FragmentHomeBinding by viewBinding()
+    private val includeBinding: ProgressBarAndErrorMsgBinding by viewBinding()
 
     private val imageLoader: ImageLoader<ImageView> by inject()
     private val viewModel: HomeViewModel by stateViewModel()
@@ -56,16 +54,6 @@ class HomeFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        _includeBinding = ProgressBarAndErrorMsgBinding.bind(binding.root)
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -177,11 +165,5 @@ class HomeFragment : BaseFragment() {
         } else {
             super.onOptionsItemSelected(item)
         }
-    }
-
-    override fun onDestroyView() {
-        _binding = null
-        _includeBinding = null
-        super.onDestroyView()
     }
 }

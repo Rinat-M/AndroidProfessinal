@@ -10,24 +10,23 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.rino.translator.R
 import com.rino.translator.databinding.ActivityMainBinding
+import com.rino.translator.ui.base.viewBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.component.KoinScopeComponent
 import org.koin.core.component.getOrCreateScope
 import org.koin.core.scope.Scope
 
 class MainActivity : AppCompatActivity(), KoinScopeComponent {
+
     override val scope: Scope by getOrCreateScope()
     private val viewModel: MainViewModel by viewModel()
 
-    private lateinit var binding: ActivityMainBinding
+    private val binding: ActivityMainBinding by viewBinding()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         applyTheme()
-
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
         val navView: BottomNavigationView = binding.navView
 
