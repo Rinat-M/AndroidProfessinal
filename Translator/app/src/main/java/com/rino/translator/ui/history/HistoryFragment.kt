@@ -4,20 +4,20 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.rino.translator.R
 import com.rino.core.model.ScreenState
 import com.rino.database.entity.Word
+import com.rino.translator.R
 import com.rino.translator.databinding.FragmentHistoryBinding
 import com.rino.translator.databinding.ProgressBarAndErrorMsgBinding
+import com.rino.translator.ui.base.BaseFragment
 import com.rino.translator.ui.details.WordDetailsFragmentArgs
 import com.rino.translator.ui.history.adapter.HistoryAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class HistoryFragment : Fragment() {
+class HistoryFragment : BaseFragment() {
 
     companion object {
         fun newInstance() = HistoryFragment()

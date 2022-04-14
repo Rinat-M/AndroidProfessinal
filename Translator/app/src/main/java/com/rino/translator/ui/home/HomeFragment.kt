@@ -7,17 +7,17 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat.recreate
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.rino.translator.R
 import com.rino.core.model.ScreenState
 import com.rino.core.model.Word
+import com.rino.translator.R
 import com.rino.translator.databinding.FragmentHomeBinding
 import com.rino.translator.databinding.ProgressBarAndErrorMsgBinding
 import com.rino.translator.network.isOnline
+import com.rino.translator.ui.base.BaseFragment
 import com.rino.translator.ui.base.ImageLoader
 import com.rino.translator.ui.details.WordDetailsFragmentArgs
 import com.rino.translator.ui.home.adapter.WordsAdapter
@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
-class HomeFragment : Fragment() {
+class HomeFragment : BaseFragment() {
 
     companion object {
         fun newInstance() = HomeFragment()

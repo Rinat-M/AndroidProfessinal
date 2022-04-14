@@ -11,12 +11,15 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.rino.translator.R
 import com.rino.translator.databinding.ActivityMainBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.component.KoinScopeComponent
+import org.koin.core.component.getOrCreateScope
+import org.koin.core.scope.Scope
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), KoinScopeComponent {
+    override val scope: Scope by getOrCreateScope()
+    private val viewModel: MainViewModel by viewModel()
 
     private lateinit var binding: ActivityMainBinding
-
-    private val viewModel: MainViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,5 +51,10 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressedDispatcher.onBackPressed()
         return super.onSupportNavigateUp()
+    }
+
+    override fun onDestroy() {
+        scope.close()
+        super.onDestroy()
     }
 }

@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,13 +13,14 @@ import com.rino.core.model.ScreenState
 import com.rino.database.entity.WordWithMeanings
 import com.rino.translator.databinding.FragmentWordDetailsBinding
 import com.rino.translator.databinding.ProgressBarAndErrorMsgBinding
+import com.rino.translator.ui.base.BaseFragment
 import com.rino.translator.ui.base.ImageLoader
 import com.rino.translator.ui.details.adapter.MeaningsAdapter
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-class WordDetailsFragment : Fragment() {
+class WordDetailsFragment : BaseFragment() {
 
     companion object {
         fun newInstance(wordId: Long) =
