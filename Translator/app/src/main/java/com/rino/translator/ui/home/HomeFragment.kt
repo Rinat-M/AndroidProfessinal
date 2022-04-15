@@ -7,18 +7,19 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat.recreate
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.rino.translator.R
 import com.rino.core.model.ScreenState
 import com.rino.core.model.Word
+import com.rino.translator.R
 import com.rino.translator.databinding.FragmentHomeBinding
 import com.rino.translator.databinding.ProgressBarAndErrorMsgBinding
 import com.rino.translator.network.isOnline
+import com.rino.translator.ui.base.BaseFragment
 import com.rino.translator.ui.base.ImageLoader
+import com.rino.translator.ui.base.viewBinding
 import com.rino.translator.ui.details.WordDetailsFragmentArgs
 import com.rino.translator.ui.home.adapter.WordsAdapter
 import com.rino.translator.ui.showToast
@@ -26,17 +27,14 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
 
-class HomeFragment : Fragment() {
+class HomeFragment : BaseFragment(R.layout.fragment_home) {
 
     companion object {
         fun newInstance() = HomeFragment()
     }
 
-    private var _binding: FragmentHomeBinding? = null
-    private val binding get() = _binding!!
-
-    private var _includeBinding: ProgressBarAndErrorMsgBinding? = null
-    private val includeBinding get() = _includeBinding!!
+    private val binding: FragmentHomeBinding by viewBinding()
+    private val includeBinding: ProgressBarAndErrorMsgBinding by viewBinding()
 
     private val imageLoader: ImageLoader<ImageView> by inject()
     private val viewModel: HomeViewModel by stateViewModel()
@@ -56,16 +54,6 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        _includeBinding = ProgressBarAndErrorMsgBinding.bind(binding.root)
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -177,11 +165,5 @@ class HomeFragment : Fragment() {
         } else {
             super.onOptionsItemSelected(item)
         }
-    }
-
-    override fun onDestroyView() {
-        _binding = null
-        _includeBinding = null
-        super.onDestroyView()
     }
 }

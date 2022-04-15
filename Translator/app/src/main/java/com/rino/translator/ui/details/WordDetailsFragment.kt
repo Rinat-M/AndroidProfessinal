@@ -1,26 +1,26 @@
 package com.rino.translator.ui.details
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rino.core.model.ScreenState
 import com.rino.database.entity.WordWithMeanings
+import com.rino.translator.R
 import com.rino.translator.databinding.FragmentWordDetailsBinding
 import com.rino.translator.databinding.ProgressBarAndErrorMsgBinding
+import com.rino.translator.ui.base.BaseFragment
 import com.rino.translator.ui.base.ImageLoader
+import com.rino.translator.ui.base.viewBinding
 import com.rino.translator.ui.details.adapter.MeaningsAdapter
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-class WordDetailsFragment : Fragment() {
+class WordDetailsFragment : BaseFragment(R.layout.fragment_word_details) {
 
     companion object {
         fun newInstance(wordId: Long) =
@@ -34,24 +34,12 @@ class WordDetailsFragment : Fragment() {
 
     private val args: WordDetailsFragmentArgs by navArgs()
 
-    private var _binding: FragmentWordDetailsBinding? = null
-    private val binding get() = _binding!!
+    private val binding: FragmentWordDetailsBinding by viewBinding()
 
-    private var _includeBinding: ProgressBarAndErrorMsgBinding? = null
-    private val includeBinding get() = _includeBinding!!
+    private val includeBinding: ProgressBarAndErrorMsgBinding by viewBinding()
 
     private val meaningsAdapter by lazy {
         MeaningsAdapter(imageLoader)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentWordDetailsBinding.inflate(inflater, container, false)
-        _includeBinding = ProgressBarAndErrorMsgBinding.bind(binding.root)
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -105,11 +93,5 @@ class WordDetailsFragment : Fragment() {
                 }
             }
         }
-    }
-
-    override fun onDestroy() {
-        _binding = null
-        _includeBinding = null
-        super.onDestroy()
     }
 }

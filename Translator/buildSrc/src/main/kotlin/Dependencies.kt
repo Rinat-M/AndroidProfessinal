@@ -8,8 +8,8 @@ object Config {
     const val KOTLIN_JVM_TARGET = "1.8"
     val JAVA_VERSION = JavaVersion.VERSION_1_8
 
-    const val VERSION_CODE = 26
-    const val VERSION_NAME = "1.5.0"
+    const val VERSION_CODE = 28
+    const val VERSION_NAME = "1.5.2"
 }
 
 object Modules {
