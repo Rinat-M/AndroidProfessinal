@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.MySplashScreen" parent="Theme.SplashScreen">
+        <item name="postSplashScreenTheme">@style/Theme.Translator</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_book_dictionary</item>
+        <item name="windowSplashScreenBackground">@android:color/darker_gray</item>
+    </style>
+
+</resources>

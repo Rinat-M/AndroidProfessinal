@@ -1,8 +1,14 @@
 package com.rino.translator.ui.main
 
+import android.animation.ObjectAnimator
+import android.os.Build
 import android.os.Bundle
+import android.view.View
+import android.view.animation.AnticipateInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.animation.doOnEnd
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -25,6 +31,25 @@ class MainActivity : AppCompatActivity(), KoinScopeComponent {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val splashScreen = installSplashScreen()
+
+        if(Build.VERSION.SDK_INT > 30) {
+            splashScreen.setOnExitAnimationListener { splashScreenViewProvider ->
+                ObjectAnimator.ofFloat(
+                    splashScreenViewProvider.view,
+                    View.TRANSLATION_X,
+                    0f,
+                    splashScreenViewProvider.view.width.toFloat()
+                ).apply {
+                    interpolator = AnticipateInterpolator()
+                    duration = 500
+                    doOnEnd { splashScreenViewProvider.remove() }
+                    start()
+                }
+            }
+        }
+
 
         applyTheme()
 
