@@ -16,6 +16,9 @@
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
     </style>
 
+    <!-- For compatibility with devices for Android < 12   -->
+    <style name="Theme.MySplashScreen" parent="Theme.Translator"/>
+
     <style name="BaseTextStyle" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textColor">@color/color_text_main</item>
         <item name="android:textSize">@dimen/text_size_standard</item>

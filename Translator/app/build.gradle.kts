@@ -93,6 +93,9 @@ dependencies {
     implementation(Libraries.NAVIGATION_FRAGMENT_KTX)
     implementation(Libraries.NAVIGATION_UI_KTX)
 
+    // Splash screen
+    implementation(Libraries.CORE_SPLASH_SCREEN)
+
     testImplementation(Libraries.JUNIT)
     androidTestImplementation(Libraries.JUNIT_ANDROID)
     androidTestImplementation(Libraries.ESPRESSO)

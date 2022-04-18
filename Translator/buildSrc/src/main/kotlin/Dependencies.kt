@@ -8,8 +8,8 @@ object Config {
     const val KOTLIN_JVM_TARGET = "1.8"
     val JAVA_VERSION = JavaVersion.VERSION_1_8
 
-    const val VERSION_CODE = 28
-    const val VERSION_NAME = "1.5.2"
+    const val VERSION_CODE = 33
+    const val VERSION_NAME = "1.6.4"
 }
 
 object Modules {
@@ -42,6 +42,7 @@ object Versions {
     const val JUNIT = "4.13.2"
     const val JUNIT_ANDROID = "1.1.3"
     const val ESPRESSO = "3.4.0"
+    const val SPLASH_SCREEN = "1.0.0-beta02"
 }
 
 object Libraries {
@@ -85,6 +86,9 @@ object Libraries {
     // Navigation
     const val NAVIGATION_FRAGMENT_KTX = "androidx.navigation:navigation-fragment-ktx:${Versions.NAVIGATION}"
     const val NAVIGATION_UI_KTX = "androidx.navigation:navigation-ui-ktx:${Versions.NAVIGATION}"
+
+    // Splash
+    const val CORE_SPLASH_SCREEN = "androidx.core:core-splashscreen:${Versions.SPLASH_SCREEN}"
 
     const val JUNIT = "junit:junit:${Versions.JUNIT}"
     const val JUNIT_ANDROID = "androidx.test.ext:junit:${Versions.JUNIT_ANDROID}"
