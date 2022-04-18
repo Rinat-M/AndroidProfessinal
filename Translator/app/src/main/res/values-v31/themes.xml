@@ -5,6 +5,7 @@
         <item name="postSplashScreenTheme">@style/Theme.Translator</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_book_dictionary</item>
         <item name="windowSplashScreenBackground">@android:color/darker_gray</item>
+        <item name="android:windowSplashScreenBrandingImage">@drawable/ic_logo_title</item>
     </style>
 
 </resources>
