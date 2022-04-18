@@ -5,6 +5,10 @@
     android:viewportHeight="200">
 
     <group
+        android:name="logoGroup"
+        android:pivotX="50"
+        android:pivotY="50.5"
+        android:rotation="0"
         android:translateX="45"
         android:translateY="45">
         <path
