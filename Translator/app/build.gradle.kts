@@ -48,6 +48,10 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
 }
 
 dependencies {
@@ -99,4 +103,11 @@ dependencies {
     testImplementation(Libraries.JUNIT)
     androidTestImplementation(Libraries.JUNIT_ANDROID)
     androidTestImplementation(Libraries.ESPRESSO)
+    testImplementation(Libraries.CORE_TESTING)
+    testImplementation(Libraries.MOCKITO_CORE)
+    testImplementation(Libraries.MOCKITO_INLINE)
+    testImplementation(Libraries.TEST_RUNNER_ANDROID)
+    testImplementation(Libraries.TEST_EXT_TRUTH_ANDROID)
+    testImplementation(Libraries.TEST_EXT_ANDROID)
+    testImplementation(Libraries.ROBOLECTRIC)
 }
