@@ -1,6 +1,5 @@
 package com.rino.translator.ui.home
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.rino.core.model.Event
 import com.rino.core.model.ScreenState
@@ -47,7 +46,6 @@ class HomeViewModel(
 
     init {
         query.value?.let { restoredQuery ->
-            Log.d(TAG, "Restored query from SavedStateHandle: $restoredQuery")
             search(restoredQuery)
         }
     }
@@ -61,7 +59,6 @@ class HomeViewModel(
             .subscribe(
                 { data -> _words.value = ScreenState.Success(data) },
                 { throwable ->
-                    Log.e(TAG, throwable.stackTraceToString())
                     _message.value = Event(throwable.message ?: "Can't load data")
                     _words.value = ScreenState.Error(throwable)
                 }

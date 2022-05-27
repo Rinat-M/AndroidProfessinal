@@ -43,6 +43,13 @@ object Versions {
     const val JUNIT_ANDROID = "1.1.3"
     const val ESPRESSO = "3.4.0"
     const val SPLASH_SCREEN = "1.0.0-beta02"
+    const val CORE_TESTING = "2.1.0"
+    const val MOCKITO_CORE = "3.3.3"
+    const val TEST_RUNNER_ANDROID = "1.4.0"
+    const val TEST_EXT_TRUTH_ANDROID = "1.4.0"
+    const val ROBOLECTRIC = "4.5.1"
+    const val TEST_EXT_ANDROID = "1.1.3"
+    const val MOCKITO_INLINE = "2.8.9"
 }
 
 object Libraries {
@@ -92,5 +99,12 @@ object Libraries {
 
     const val JUNIT = "junit:junit:${Versions.JUNIT}"
     const val JUNIT_ANDROID = "androidx.test.ext:junit:${Versions.JUNIT_ANDROID}"
+    const val TEST_RUNNER_ANDROID = "androidx.test:runner:${Versions.TEST_RUNNER_ANDROID}"
+    const val TEST_EXT_TRUTH_ANDROID = "androidx.test.ext:truth:${Versions.TEST_EXT_TRUTH_ANDROID}"
+    const val TEST_EXT_ANDROID = "androidx.test.ext:junit-ktx:${Versions.TEST_EXT_ANDROID}"
     const val ESPRESSO = "androidx.test.espresso:espresso-core:${Versions.ESPRESSO}"
+    const val CORE_TESTING = "androidx.arch.core:core-testing:${Versions.CORE_TESTING}"
+    const val MOCKITO_CORE = "org.mockito:mockito-core:${Versions.MOCKITO_CORE}"
+    const val MOCKITO_INLINE = "org.mockito:mockito-inline:${Versions.MOCKITO_INLINE}"
+    const val ROBOLECTRIC = "org.robolectric:robolectric:${Versions.ROBOLECTRIC}"
 }
